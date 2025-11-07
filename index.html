@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>539 三號組中獎機率計算器｜手機版</title>
+<title>17Live 三星彩中獎機率計算器｜手機版</title>
 <style>
   :root{
     --bg:#0f172a;
@@ -60,7 +60,7 @@
 </style>
 </head>
 <body>
-  <h1>539 三號組中獎機率計算器</h1>
+  <h1>17Live 三星彩中獎機率計算器</h1>
   <div class="sub">UI = B（手機優化）、邏輯 = C（平均 / R 值 / 熱冷混合 交叉）｜順序不重要｜內建目前 17 期 + 可本機新增</div>
 
   <div class="grid">
@@ -325,7 +325,6 @@ function run(){
   if(avoidRepeat && hist.length>0){
     const last = sortTrio(hist[hist.length-1]);
     if(sameTrio(trioC,last)){
-      // 換下一個冷號
       const nextCold = coldCandidates[1]+1;
       const alt = sortTrio([hot[0], hot[1], nextCold]);
       hotcoldText += `\n（避免重複：上一期相同 → 改用 ${alt.join(' ')} → ${fmtPct(trioProb(probsR, alt))}）`;
