@@ -49,15 +49,6 @@
   }
   .btn.sec{ background:#0b1020; color:var(--text); border:1px solid rgba(148,163,184,.25) }
   .btn.small{ padding:9px 10px; font-size:14px }
-  .chips{display:flex; gap:8px; flex-wrap:wrap}
-  .chip{padding:8px 10px; border-radius:999px; border:1px solid rgba(148,163,184,.25); color:var(--muted); font-size:13px}
-  .switch{display:flex; align-items:center; gap:10px}
-  .switch input{transform:scale(1.2)}
-  .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size:14px; white-space:pre-wrap}
-  .pill{display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700}
-  .pill.good{background:rgba(52,211,153,.15); color:var(--good)}
-  .pill.warn{background:rgba(251,191,36,.15); color:var(--warn)}
-  .pill.bad{background:rgba(248,113,113,.15); color:var(--bad)}
   .list li{margin:6px 0}
   .muted{color:var(--muted)}
   .kpi{display:flex; gap:10px; flex-wrap:wrap}
@@ -69,7 +60,7 @@
 </head>
 <body>
   <h1>539 三號組中獎機率計算器</h1>
-  <div class="sub">UI = B（手機優化）、邏輯 = C（平均 / R 值 / 熱冷混合 交叉）｜順序不重要</div>
+  <div class="sub">UI = B（手機優化）、邏輯 = C（平均 / R 值 / 熱冷混合 交叉）｜順序不重要｜內建目前 17 期</div>
 
   <div class="grid">
     <div class="card">
@@ -106,7 +97,7 @@
       <div class="kpi">
         <div class="box">
           <h3>內建歷史期數</h3>
-          <div class="v" id="k_hist">11</div>
+          <div class="v" id="k_hist">17</div>
         </div>
         <div class="box">
           <h3>當前 r</h3>
@@ -145,7 +136,7 @@
   </div>
 
 <script>
-// 內建 11 期
+// 內建 17 期（你提供的 11 期 + 6 期新增）
 const baseHistory = [
   [7,5,6],
   [9,10,4],
@@ -157,7 +148,13 @@ const baseHistory = [
   [8,9,6],
   [1,5,9],
   [4,1,8],
-  [6,4,2]
+  [6,4,2],
+  [10,8,6],
+  [6,4,8],
+  [4,9,10],
+  [10,5,3],
+  [9,6,1],
+  [6,5,10]
 ];
 
 function setR(v){
