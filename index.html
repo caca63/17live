@@ -56,20 +56,22 @@
   .box h3{margin:0 0 6px; font-size:13px; color:var(--muted); font-weight:600}
   .box .v{font-size:18px; font-weight:800}
   .footer{margin-top:14px; font-size:12px; color:var(--muted)}
+  .hint{font-size:12px; color:var(--muted); margin-top:6px}
 </style>
 </head>
 <body>
   <h1>539 三號組中獎機率計算器</h1>
-  <div class="sub">UI = B（手機優化）、邏輯 = C（平均 / R 值 / 熱冷混合 交叉）｜順序不重要｜內建目前 17 期</div>
+  <div class="sub">UI = B（手機優化）、邏輯 = C（平均 / R 值 / 熱冷混合 交叉）｜順序不重要｜內建目前 17 期 + 可本機新增</div>
 
   <div class="grid">
     <div class="card">
-      <label>新增最新一期（三顆，以空格分隔，可不填）</label>
+      <label>新增最新一期（三顆，以空格分隔）</label>
       <input id="latest" type="text" placeholder="例如：2 5 7" inputmode="numeric" />
       <div class="row" style="margin-top:8px">
-        <div class="switch">
-          <input id="streak" type="checkbox" />
-          <label for="streak" style="margin:0">啟用 streak penalty</label>
+        <div class="row" style="gap:8px">
+          <button class="btn small" onclick="appendLatest()">＋ 加入到歷史（本機）</button>
+          <button class="btn small sec" onclick="clearAdded()">重置本機新增</button>
+          <button class="btn small sec" onclick="clearLatest()">清空輸入框</button>
         </div>
       </div>
 
@@ -81,6 +83,15 @@
         <button class="btn small sec" onclick="setR(0.95)">r=0.95</button>
       </div>
 
+      <div class="row" style="margin-top:6px">
+        <label class="row" style="align-items:center;gap:8px;font-weight:500">
+          <input id="streak" type="checkbox" /> 啟用 streak penalty
+        </label>
+        <label class="row" style="align-items:center;gap:8px;font-weight:500">
+          <input id="avoidRepeat" type="checkbox" checked /> 避免推薦「完全重複上一期」的組合
+        </label>
+      </div>
+
       <label style="margin-top:10px">我的下注（每行一組，空格分隔）</label>
       <textarea id="bets" placeholder="例：&#10;1 4 6&#10;1 9 2&#10;4 6 9">1 4 6
 1 9 2
@@ -88,15 +99,14 @@
 
       <div class="row" style="margin-top:10px">
         <button class="btn" onclick="run()">計算中獎機率 & 生成推薦</button>
-        <button class="btn sec" onclick="clearLatest()">清空最新一期</button>
       </div>
-      <div class="footer">小提示：r 越接近 1 → 越重視最近；streak penalty 會抑制連續爆發號、略加權長時間未開號。</div>
+      <div class="footer">r 越接近 1 → 越重視最近；streak penalty 抑制連續爆發、略加權久未開。新增的歷史會保存在你的瀏覽器（localStorage）。</div>
     </div>
 
     <div class="card">
       <div class="kpi">
         <div class="box">
-          <h3>內建歷史期數</h3>
+          <h3>歷史期數（內建+本機）</h3>
           <div class="v" id="k_hist">17</div>
         </div>
         <div class="box">
@@ -104,10 +114,12 @@
           <div class="v" id="k_r">0.80</div>
         </div>
         <div class="box">
-          <h3>平均基線 (任一組)</h3>
+          <h3>平均基線</h3>
           <div class="v">0.833%</div>
         </div>
       </div>
+
+      <div class="hint" id="addedHint"></div>
 
       <label style="margin-top:10px">我的下注結果</label>
       <div id="myres" class="mono muted">尚未計算</div>
@@ -157,6 +169,45 @@ const baseHistory = [
   [6,5,10]
 ];
 
+const LS_KEY = "extraHistory_539_v1";
+
+function loadAdded(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) return arr.filter(x => Array.isArray(x) && x.length===3);
+    return [];
+  }catch(e){ return []; }
+}
+
+function saveAdded(arr){
+  localStorage.setItem(LS_KEY, JSON.stringify(arr));
+}
+
+function appendLatest(){
+  const txt = document.getElementById('latest').value.trim();
+  const parts = txt.split(/\s+/).map(n=>parseInt(n,10)).filter(Boolean);
+  if(parts.length!==3){
+    alert("請輸入三個數字，以空格分隔。");
+    return;
+  }
+  const added = loadAdded();
+  added.push(parts);
+  saveAdded(added);
+  document.getElementById('latest').value='';
+  refreshHint();
+  run(); // 即時計算
+}
+
+function clearAdded(){
+  if(confirm("確定要清除本機新增的所有期數嗎？")){
+    saveAdded([]);
+    refreshHint();
+    run();
+  }
+}
+
 function setR(v){
   document.getElementById('r').value = v.toFixed(2);
   document.getElementById('k_r').textContent = v.toFixed(2);
@@ -167,14 +218,16 @@ function clearLatest(){
 }
 
 function getHistory(){
-  const latest = document.getElementById('latest').value.trim();
-  const hist = baseHistory.map(row=>row.slice());
-  if(latest){
-    const parts = latest.split(/\s+/).map(x=>parseInt(x,10)).filter(Boolean);
-    if(parts.length===3){ hist.push(parts); }
-  }
+  const added = loadAdded();
+  const hist = baseHistory.map(row=>row.slice()).concat(added);
   document.getElementById('k_hist').textContent = String(hist.length);
   return hist;
+}
+
+function refreshHint(){
+  const added = loadAdded();
+  const hint = added.length ? `本機新增期數：${added.length} 期（會自動參與計算）` : '（尚未有本機新增期數）';
+  document.getElementById('addedHint').textContent = hint;
 }
 
 // 計權重與單號機率
@@ -231,16 +284,26 @@ function simpleCounts(hist){
 }
 
 function fmtPct(x){ return (x*100).toFixed(2)+'%'; }
+function sameTrio(a,b){ return a[0]===b[0] && a[1]===b[1] && a[2]===b[2]; }
+function sortTrio(t){ return t.slice().sort((x,y)=>x-y); }
 
 function run(){
   const r = Math.max(0, Math.min(1, parseFloat(document.getElementById('r').value) || 0.8));
   document.getElementById('k_r').textContent = r.toFixed(2);
   const useStreak = document.getElementById('streak').checked;
+  const avoidRepeat = document.getElementById('avoidRepeat').checked;
   const hist = getHistory();
 
   // 方法 B：R 值模型（以目前 r）
   const probsR = singleProbsByR(hist, r, useStreak);
-  const trios = allTrios();
+  let trios = allTrios();
+
+  // 若勾選避免重複，過濾掉與「上一期」完全相同的三號組
+  if(avoidRepeat && hist.length>0){
+    const last = sortTrio(hist[hist.length-1]);
+    trios = trios.filter(T => !sameTrio(sortTrio(T), last));
+  }
+
   trios.sort((A,B)=> trioProb(probsR,B) - trioProb(probsR,A));
   const topR = trios.slice(0,10).map(T => `${T.join(' ')}  →  ${fmtPct(trioProb(probsR,T))}`).join('\n');
   const topSingles = probsR.map((p,i)=>({n:i+1,p})).sort((a,b)=>b.p-a.p).slice(0,5);
@@ -254,31 +317,61 @@ function run(){
   const hot = [orderIdx[0]+1, orderIdx[1]+1];
   const coldCandidates = [...cnt.keys()].sort((i,j)=> cnt[i]-cnt[j]);
   const cold = coldCandidates[0]+1;
-  const trioC = [hot[0], hot[1], cold].sort((a,b)=>a-b);
+  const trioC = sortTrio([hot[0], hot[1], cold]);
   const probC = trioProb(probsR, trioC);
-  document.getElementById('hotcold').textContent = `熱號2：${hot.join('、')}  +  冷號1：${cold}\n推薦組：${trioC.join(' ')}  →  ${fmtPct(probC)}（以 r 加權機率評估）`;
 
-  // 我的下注
+  // 若避免重複且剛好等於上一期，則提示並找次佳冷號
+  let hotcoldText = `熱號2：${hot.join('、')}  +  冷號1：${cold}\n推薦組：${trioC.join(' ')}  →  ${fmtPct(probC)}（以 r 加權機率評估）`;
+  if(avoidRepeat && hist.length>0){
+    const last = sortTrio(hist[hist.length-1]);
+    if(sameTrio(trioC,last)){
+      // 換下一個冷號
+      const nextCold = coldCandidates[1]+1;
+      const alt = sortTrio([hot[0], hot[1], nextCold]);
+      hotcoldText += `\n（避免重複：上一期相同 → 改用 ${alt.join(' ')} → ${fmtPct(trioProb(probsR, alt))}）`;
+    }
+  }
+  document.getElementById('hotcold').textContent = hotcoldText;
+
+  // 我的下注（不強制避重，僅提示）
   const bets = document.getElementById('bets').value.trim().split(/\n+/).map(l=>l.trim()).filter(Boolean);
   const lines = [];
   for(const line of bets){
-    const trio = line.split(/\s+/).map(x=>parseInt(x,10)).filter(Boolean).slice(0,3).sort((a,b)=>a-b);
+    const trio = sortTrio(line.split(/\s+/).map(x=>parseInt(x,10)).filter(Boolean).slice(0,3));
     if(trio.length===3){
       const p = trioProb(probsR, trio);
-      lines.push(`${trio.join(' ')}  →  ${fmtPct(p)}  ${p>=0.02? '▸ '+(p>=0.03? '★高':'良'):''}`);
+      let note = (p>=0.02? '▸ '+(p>=0.03? '★高':'良') : '');
+      if(avoidRepeat && hist.length>0){
+        const last = sortTrio(hist[hist.length-1]);
+        if(sameTrio(trio,last)) note += '（提示：與上一期完全相同）';
+      }
+      lines.push(`${trio.join(' ')}  →  ${fmtPct(p)}  ${note}`);
     }
   }
   document.getElementById('myres').textContent = lines.length? lines.join('\n') : '（沒有輸入下注）';
 
-  // 交叉推薦（C）：綜合
+  // 交叉推薦
   const ens = [];
   const topB1 = trios[0], topB2 = trios.find(T => T.join(',')!==topB1.join(',')) || trios[1];
   ens.push(`B-1（r 模型）：${topB1.join(' ')}  →  ${fmtPct(trioProb(probsR, topB1))}`);
   ens.push(`B-2（r 模型）：${topB2.join(' ')}  →  ${fmtPct(trioProb(probsR, topB2))}`);
-  ens.push(`C（熱2+冷1）：${trioC.join(' ')}  →  ${fmtPct(probC)}`);
+
+  // 熱冷一組若與上一期相同，改推替代
+  let shownC = trioC;
+  if(avoidRepeat && hist.length>0){
+    const last = sortTrio(hist[hist.length-1]);
+    if(sameTrio(trioC,last)){
+      const nextCold = coldCandidates[1]+1;
+      shownC = sortTrio([hot[0], hot[1], nextCold]);
+    }
+  }
+  ens.push(`C（熱2+冷1）：${shownC.join(' ')}  →  ${fmtPct(trioProb(probsR, shownC))}`);
   ens.push(`A（平均基線）：任一組皆 0.833%`);
   document.getElementById('ensemble').innerHTML = '<li>'+ens.join('</li><li>')+'</li>';
 }
+
+// 初始化提示
+refreshHint();
 </script>
 </body>
 </html>
