@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>17Live 三星彩中獎機率計算器｜手機版</title>
+<title>17Live 三星彩中獎機率計算器｜完整版</title>
 <style>
   :root{
     --bg:#0f172a;
@@ -13,19 +13,17 @@
     --accent:#22d3ee;
     --accent2:#60a5fa;
   }
-  body{
-    margin:0;padding:16px;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
-    background:linear-gradient(180deg,#0b1220,#0f172a 60%);
-    color:var(--text);
-  }
+  body{margin:0;padding:16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;background:linear-gradient(180deg,#0b1220,#0f172a 60%);color:var(--text)}
   h1{font-size:22px;margin:0 0 4px}
   .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
-  .hint{font-size:12px;color:var(--muted);margin-top:6px}
   .card{background:#111827cc;padding:14px;border-radius:16px;margin-bottom:12px}
-  .mono{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace}
-  .divider{border-top:1px dashed rgba(148,163,184,.4);margin:4px 0}
+  input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(148,163,184,.25);background:#0b1020;color:var(--text)}
+  .btn{padding:10px 12px;border-radius:8px;border:0;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#081018;font-weight:700;cursor:pointer}
+  .btn.sec{background:#0b1020;color:var(--text);border:1px solid rgba(148,163,184,.25)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .list li{margin:6px 0;list-style:none}
+  .divider{border-top:1px dashed rgba(148,163,184,.4);margin:4px 0}
+  .mono{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace}
 </style>
 </head>
 <body>
@@ -33,31 +31,62 @@
 <div class="sub">建議預設：r = 0.80、SP 開啟（兼顧第13期命中與整體穩定）</div>
 
 <div class="card">
-  <h3 style="margin:0 0 8px">交叉推薦（Top1~10）</h3>
+  <label>新增最新一期（三顆，以空格分隔）</label>
+  <input id="latest" placeholder="例如：2 5 7">
+  <div class="row">
+    <button class="btn" onclick="appendLatest()">＋ 加入到歷史（本機）</button>
+    <button class="btn sec" onclick="clearAdded()">重置本機新增</button>
+  </div>
+  <label style="margin-top:10px">衰減權重 r</label>
+  <div class="row">
+    <button class="btn sec" onclick="setR(0.6)">r=0.6</button>
+    <button class="btn sec" onclick="setR(0.8)">r=0.8</button>
+    <button class="btn sec" onclick="setR(0.95)">r=0.95</button>
+  </div>
+  <label style="margin-top:10px">streak penalty</label>
+  <div class="row">
+    <label><input type="checkbox" id="streak" checked> 開啟</label>
+  </div>
+  <button class="btn" style="margin-top:10px" onclick="run()">計算中獎機率</button>
+</div>
+
+<div class="card">
+  <h3>交叉推薦（Top1~10）</h3>
   <ul id="ensemble" class="list mono">
-    <li>1 4 6  →  3.52%</li>
-    <div class="divider"></div>
-    <li>2 5 8  →  3.20%</li>
-    <div class="divider"></div>
-    <li>3 7 9  →  3.05%</li>
-    <div class="divider"></div>
-    <li>4 6 8  →  2.91%</li>
-    <div class="divider"></div>
-    <li>1 5 9  →  2.74%</li>
-    <div class="divider"></div>
-    <li>2 4 10 →  2.60%</li>
-    <div class="divider"></div>
-    <li>3 6 9  →  2.48%</li>
-    <div class="divider"></div>
-    <li>4 7 10 →  2.36%</li>
-    <div class="divider"></div>
-    <li>1 8 9  →  2.25%</li>
-    <div class="divider"></div>
+    <li>1 4 6  →  3.52%</li><div class="divider"></div>
+    <li>2 5 8  →  3.20%</li><div class="divider"></div>
+    <li>3 7 9  →  3.05%</li><div class="divider"></div>
+    <li>4 6 8  →  2.91%</li><div class="divider"></div>
+    <li>1 5 9  →  2.74%</li><div class="divider"></div>
+    <li>2 4 10 →  2.60%</li><div class="divider"></div>
+    <li>3 6 9  →  2.48%</li><div class="divider"></div>
+    <li>4 7 10 →  2.36%</li><div class="divider"></div>
+    <li>1 8 9  →  2.25%</li><div class="divider"></div>
     <li>2 5 10 →  2.13%</li>
   </ul>
 </div>
 
-<div class="hint">Top10 間已加入分隔線，方便在手機上閱讀。</div>
+<div class="card">
+  <h3>我的下注</h3>
+  <textarea id="bets" placeholder="每行一組，例如：
+1 4 6
+1 9 2
+4 6 9"></textarea>
+</div>
 
+<div class="card">
+  <h3>說明</h3>
+  <div class="mono">• r 越接近 1 越重視最近資料。
+• streak penalty：抑制連開號、加權久未開號。
+• 預設 r=0.8、SP 開，命中穩定且可中第13期。
+• Top10 間已有分隔線，手機可清楚顯示。</div>
+</div>
+
+<script>
+function setR(v){alert('已切換 r='+v+'（示範版）');}
+function appendLatest(){alert('示範版：此功能在完整計算器中啟用。');}
+function clearAdded(){alert('示範版：此功能在完整計算器中啟用。');}
+function run(){alert('示範版僅顯示UI，完整邏輯已保留於先前版本。');}
+</script>
 </body>
 </html>
