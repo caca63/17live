@@ -83,7 +83,8 @@ label.switch input{
 .split2{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
+  column-gap:8px;
+  row-gap:1px; /* 🔧 改成這樣：上下距離縮小為 1px */
 }
 
 /* 小卡片樣式 */
