@@ -83,11 +83,15 @@ label.switch input{
 .split2{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:8px;   /* 左右間距保持 */
-  row-gap:0;        /* 🔧 垂直間距改成 0，兩排更緊 */
+  column-gap:8px;
+  row-gap:0; /* 確保 grid 無垂直間距 */
 }
-#singleTop .chip, #toplist .chip {
-  margin-bottom:0;  /* 🔧 卡片之間不再留額外底距 */
+
+#singleTop .chip, #toplist .chip{
+  margin:0;
+  padding:5px 6px; /* 稍微縮內距，避免文字擠 */
+  box-shadow:none; /* 🔧 移除陰影避免撐開縫隙 */
+  border:1px solid rgba(148,163,184,.3);
 }
 
 /* 小卡片樣式 */
@@ -103,18 +107,23 @@ label.switch input{
   align-items:center;
   margin-bottom:4px;
 }
-#toplist .chip { margin-bottom: 1px; } /* 🔧 推薦 Top 間距縮小為 1px */
-
-.chip span.label{ color:#e5e7eb; }
-.chip span.value{ font-weight:600; }
-
+.chip span.label{
+  color:#e5e7eb;
+}
+.chip span.value{
+  font-weight:600;
+}
 .chip.rankTop{
   border-color:#38bdf8;
   box-shadow:0 0 0 1px rgba(56,189,248,.4),0 10px 25px rgba(15,23,42,.9);
   background:radial-gradient(circle at top,#0ea5e944,#020617);
 }
-.chip.rankTop span.label{ color:#f9fafb; }
-.chip.rankTop span.value{ color:#7dd3fc; }
+.chip.rankTop span.label{
+  color:#f9fafb;
+}
+.chip.rankTop span.value{
+  color:#7dd3fc;
+}
 
 /* 命中紀錄表 */
 .hit-table-wrapper{
@@ -146,9 +155,15 @@ label.switch input{
   color:#bfdbfe;
   font-weight:600;
 }
-.hit-table tr:nth-child(even){ background:#020617; }
-.hit-table tr:nth-child(odd){ background:#020617; }
-.hit-table tr:hover{ background:#0b1120; }
+.hit-table tr:nth-child(even){
+  background:#020617;
+}
+.hit-table tr:nth-child(odd){
+  background:#020617;
+}
+.hit-table tr:hover{
+  background:#0b1120;
+}
 </style>
 </head>
 <body>
