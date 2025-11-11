@@ -79,19 +79,16 @@ label.switch input{
   vertical-align:middle;
 }
 
-/* 左右兩欄容器 */
+/* 左右兩欄容器：改用 flex + 兩個直欄確保貼齊 */
 .split2{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:8px;
-  row-gap:0; /* 確保 grid 無垂直間距 */
+  display:flex;
+  gap:8px;            /* 左右間距 */
 }
-
-#singleTop .chip, #toplist .chip{
-  margin:0;
-  padding:5px 6px; /* 稍微縮內距，避免文字擠 */
-  box-shadow:none; /* 🔧 移除陰影避免撐開縫隙 */
-  border:1px solid rgba(148,163,184,.3);
+.split2>div{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:1px;            /* 🔧 每個 chip 之間垂直距離僅 1px */
 }
 
 /* 小卡片樣式 */
