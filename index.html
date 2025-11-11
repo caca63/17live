@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>17Live 三星彩中獎機率計算器 v18.3</title>
+<title>17Live 三星彩中獎機率計算器 v18.4</title>
 <style>
 body{
   background:#0f172a;color:#e5e7eb;
@@ -11,28 +11,29 @@ body{
   margin:0;padding:16px;
 }
 .card{
-  background:#111827cc;padding:14px;border-radius:16px;
-  margin-bottom:12px;box-shadow:0 10px 25px rgba(15,23,42,.6);
+  background:#111827cc;padding:10px;border-radius:16px;
+  margin-bottom:8px;box-shadow:0 10px 25px rgba(15,23,42,.6);
 }
 .btn{
-  padding:8px 12px;border-radius:999px;border:0;
+  padding:6px 10px;border-radius:999px;border:0;
   background:linear-gradient(135deg,#22d3ee,#60a5fa);
-  color:#020617;font-weight:700;cursor:pointer;
+  color:#020617;font-weight:700;cursor:pointer;font-size:13px;
 }
 .btn.sec{
   background:#020617;color:#e5e7eb;
   border:1px solid rgba(148,163,184,.25);
 }
 input,textarea,select{
-  width:100%;padding:10px;border-radius:10px;
+  width:100%;padding:8px;border-radius:10px;
   border:1px solid rgba(148,163,184,.25);
   background:#020617;color:#e5e7eb;box-sizing:border-box;
+  font-size:13px;
 }
 .row{
-  display:flex;flex-wrap:wrap;gap:10px;
+  display:flex;flex-wrap:wrap;gap:6px;
   align-items:center;margin-top:4px;
 }
-.divider{border-top:1px dashed rgba(148,163,184,.4);margin:2px 0;}
+.divider{border-top:1px dashed rgba(148,163,184,.4);margin:4px 0;}
 .mono{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;}
 label.switch{
   display:inline-block;font-size:13px;
@@ -47,7 +48,7 @@ label.switch input{margin-right:4px;vertical-align:middle;}
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
 }
 .chip{
-  background:#1e293b;border-radius:12px;padding:6px 8px;
+  background:#1e293b;border-radius:12px;padding:4px 6px;
   font-size:13px;border:1px solid rgba(148,163,184,.35);
   box-shadow:0 4px 10px rgba(15,23,42,.8);
   display:flex;justify-content:space-between;align-items:center;
@@ -83,34 +84,34 @@ label.switch input{margin-right:4px;vertical-align:middle;}
 </style>
 </head>
 <body>
-<h1>17Live 三星彩中獎機率計算器 v18.3</h1>
-<div id="stats" style="color:#60a5fa;font-size:13px;line-height:1.4;margin-bottom:8px"></div>
-<div style="color:#94a3b8;font-size:13px;margin-bottom:10px">
+<h1>17Live 三星彩中獎機率計算器 v18.4</h1>
+<div id="stats" style="color:#60a5fa;font-size:13px;line-height:1.4;margin-bottom:6px"></div>
+<div style="color:#94a3b8;font-size:13px;margin-bottom:8px">
   建議預設：r=0.80、啟用「🔁 熱號連開懲罰」與「避免重複上一期」
 </div>
 
 <div class="card">
   <label>衰減權重 r</label>
   <div class="row">
-    <input id="r" type="number" step="0.01" value="0.8" min="0" max="1" style="max-width:100px">
+    <input id="r" type="number" step="0.01" value="0.8" min="0" max="1" style="max-width:90px">
     <button class="btn sec" onclick="setR(0.6)">r=0.6</button>
     <button class="btn sec" onclick="setR(0.8)">r=0.8</button>
     <button class="btn sec" onclick="setR(0.95)">r=0.95</button>
   </div>
-  <div class="row" style="margin-top:8px">
+  <div class="row" style="margin-top:6px">
     <label class="switch"><input type="checkbox" id="streak" checked> 🔁 熱號連開懲罰</label>
     <label class="switch"><input type="checkbox" id="avoidRepeat" checked onchange="toggleStrict()"> 避免重複上一期</label>
     <label id="strictWrap"><input type="checkbox" id="strictRepeat"> 嚴格排除（兩碼以上重複直接剃除）</label>
   </div>
 
-  <label style="margin-top:8px">我的下注（三顆一組，每行一組）</label>
-  <textarea id="bets" placeholder="例如：1 4 6&#10;1 9 2&#10;4 6 9"></textarea>
+  <label style="margin-top:6px">我的下注（三顆一組，每行一組）</label>
+  <textarea id="bets" rows="3" placeholder="例如：1 4 6&#10;1 9 2&#10;4 6 9"></textarea>
 
-  <div class="row" style="margin-top:8px">
+  <div class="row" style="margin-top:6px">
     <button class="btn" onclick="run()">計算中獎機率</button>
   </div>
 
-  <div class="divider" style="margin:10px 0"></div>
+  <div class="divider"></div>
   <label>新增最新一期（三顆）</label>
   <input id="latest" placeholder="例如：2 5 7">
   <div class="row">
@@ -124,7 +125,7 @@ label.switch input{margin-right:4px;vertical-align:middle;}
   <div style="font-size:12px;color:#9ca3af;margin-bottom:4px">
     單號平均理論機率：約 10.00%（完全隨機 1/10）
   </div>
-  <div id="singleTop" class="mono split2" style="margin-top:6px;">
+  <div id="singleTop" class="mono split2" style="margin-top:4px;">
     <div style="grid-column:1 / -1;font-size:13px;color:#9ca3af">
       尚未計算，請先按「計算中獎機率」。
     </div>
@@ -136,7 +137,7 @@ label.switch input{margin-right:4px;vertical-align:middle;}
   <div style="font-size:12px;color:#9ca3af;margin-bottom:4px">
     三號組平均理論機率：約 0.83%（1 / C(10,3) ≈ 1/120）
   </div>
-  <div id="toplist" class="mono split2" style="margin-top:6px;"></div>
+  <div id="toplist" class="mono split2" style="margin-top:4px;"></div>
 </div>
 
 <div class="card">
@@ -146,7 +147,7 @@ label.switch input{margin-right:4px;vertical-align:middle;}
 
 <div class="card">
   <h3>📈 命中紀錄表（回測：以 TopN 預測下一期）</h3>
-  <div style="font-size:12px;color:#9ca3af;margin-bottom:6px">
+  <div style="font-size:12px;color:#9ca3af;margin-bottom:4px">
     🔢 回測採用前
     <select id="topN" onchange="run()" style="width:auto;display:inline-block;background:#020617;color:#e5e7eb;border:1px solid rgba(148,163,184,.6);border-radius:999px;padding:2px 10px;font-size:12px;margin:0 4px;">
       <option value="1">1</option>
@@ -181,7 +182,7 @@ const baseHistory=[
   [6,4,2],[10,8,6],[6,4,8],[4,9,10],[10,5,3],
   [9,6,1],[6,5,10],[2,4,7],[1,4,6],[4,6,10]
 ];
-const LS_KEY="extraHist_v183";
+const LS_KEY="extraHist_v184";
 let added=JSON.parse(localStorage.getItem(LS_KEY)||"[]");
 
 function toggleStrict(){
@@ -259,7 +260,6 @@ function trioProb(p,t){
 }
 function fmt(x){return(x*100).toFixed(2)+"%";}
 
-// 單號分佈：排名後左右分欄，Top1~3 高亮
 function updateSingleTop(probs,hist){
   const n=hist.length;
   const last=hist[n-1]||[];
@@ -312,7 +312,6 @@ function updateSingleTop(probs,hist){
   container.innerHTML=`<div>${leftHtml}</div><div>${rightHtml}</div>`;
 }
 
-// 組合層：平衡懲罰邏輯
 function computeTopCombos(hist,probs,avoid,strict){
   const tri=allTrios(),n=hist.length;
   const last=hist[n-1],prev=hist[n-2]||[];
@@ -341,7 +340,6 @@ function computeTopCombos(hist,probs,avoid,strict){
   return scored;
 }
 
-// 回測：從第3期起，顯示全部或最近30期
 function backtestTopN(hist,r,streakOn,avoid,strict,topN){
   const n=hist.length,rows=[];
   if(n<3)return rows;
@@ -459,9 +457,15 @@ function run(){
     const res=[];
     for(const l of lines){
       const trio=l.split(/\s+/).map(Number).filter(n=>!isNaN(n));
-      if(trio.length!==3){res.push(`${l} → 格式錯誤`);continue;}
+      if(trio.length!==3){
+        res.push(`${l} → 格式錯誤`);
+        continue;
+      }
       const pz=trioProb(probs,trio);
-      res.push(`${trio.join(" ")} → ${fmt(pz)}`);
+      const sortedKey=trio.slice().sort((a,b)=>a-b).join(",");
+      const rankIndex=scored.findIndex(x=>x.t.join(",")===sortedKey);
+      const rankText=rankIndex>=0?`（第 ${rankIndex+1} 名／共 120 組）`:"";
+      res.push(`${trio.join(" ")} → ${fmt(pz)} ${rankText}`);
     }
     document.getElementById("myres").textContent=res.join("\n");
   }
