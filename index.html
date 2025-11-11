@@ -2,100 +2,193 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>17Live 三星彩中獎機率計算器 v18.4.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>17Live 三星彩中獎機率計算器 v18.2</title>
 <style>
 body{
-  background:#0f172a;color:#e5e7eb;
+  background:#0f172a;
+  color:#e5e7eb;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
-  margin:0;padding:16px;
+  margin:0;
+  padding:16px;
 }
 .card{
-  background:#111827cc;padding:10px;border-radius:16px;
-  margin-bottom:8px;box-shadow:0 10px 25px rgba(15,23,42,.6);
+  background:#111827cc;
+  padding:14px;
+  border-radius:16px;
+  margin-bottom:12px;
+  box-shadow:0 10px 25px rgba(15,23,42,.6);
 }
 .btn{
-  padding:6px 10px;border-radius:999px;border:0;
+  padding:8px 12px;
+  border-radius:999px;
+  border:0;
   background:linear-gradient(135deg,#22d3ee,#60a5fa);
-  color:#020617;font-weight:700;cursor:pointer;font-size:13px;
+  color:#020617;
+  font-weight:700;
+  cursor:pointer;
 }
 .btn.sec{
-  background:#020617;color:#e5e7eb;
+  background:#020617;
+  color:#e5e7eb;
   border:1px solid rgba(148,163,184,.25);
 }
 input,textarea,select{
-  width:100%;padding:8px;border-radius:10px;
+  width:100%;
+  padding:10px;
+  border-radius:10px;
   border:1px solid rgba(148,163,184,.25);
-  background:#020617;color:#e5e7eb;box-sizing:border-box;
-  font-size:13px;
+  background:#020617;
+  color:#e5e7eb;
+  box-sizing:border-box;
 }
-.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px;}
-.divider{border-top:1px dashed rgba(148,163,184,.4);margin:4px 0;}
-.mono{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;}
-label.switch{display:inline-block;font-size:13px;vertical-align:middle;margin:0;padding:0;}
-label.switch input{margin-right:4px;vertical-align:middle;}
-#strictWrap{display:inline-block;font-size:13px;margin:0;padding:0;}
-#strictWrap input{margin-right:3px;vertical-align:middle;}
-.split2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  margin-top:4px;
+}
+.divider{
+  border-top:1px dashed rgba(148,163,184,.4);
+  margin:2px 0;
+}
+.mono{
+  white-space:pre-wrap;
+  font-family:ui-monospace,Consolas,monospace;
+}
+label.switch{
+  display:inline-block;
+  font-size:13px;
+  vertical-align:middle;
+  margin:0;
+  padding:0;
+}
+label.switch input{
+  margin-right:4px;
+  vertical-align:middle;
+}
+#strictWrap{
+  display:inline-block;
+  font-size:13px;
+  margin:0;
+  padding:0;
+}
+#strictWrap input{
+  margin-right:3px;
+  vertical-align:middle;
+}
+
+/* 左右兩欄容器 */
+.split2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+
+/* 小卡片樣式 */
 .chip{
-  background:#1e293b;border-radius:12px;padding:4px 6px;
-  font-size:13px;border:1px solid rgba(148,163,184,.35);
+  background:#1e293b;
+  border-radius:12px;
+  padding:6px 8px;
+  font-size:13px;
+  border:1px solid rgba(148,163,184,.35);
   box-shadow:0 4px 10px rgba(15,23,42,.8);
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   margin-bottom:4px;
 }
-#toplist .chip { margin-bottom:2px; } /* Top 區塊間距縮小 */
-.chip span.label{color:#e5e7eb;}
-.chip span.value{font-weight:600;}
+#toplist .chip { margin-bottom: 1px; } /* 🔧 新增：推薦 Top 間距縮小為 1px */
+}
+.chip span.label{
+  color:#e5e7eb;
+}
+.chip span.value{
+  font-weight:600;
+}
 .chip.rankTop{
   border-color:#38bdf8;
   box-shadow:0 0 0 1px rgba(56,189,248,.4),0 10px 25px rgba(15,23,42,.9);
   background:radial-gradient(circle at top,#0ea5e944,#020617);
 }
-.chip.rankTop span.label{color:#f9fafb;}
-.chip.rankTop span.value{color:#7dd3fc;}
-.hit-table-wrapper{
-  max-height:260px;overflow:auto;border-radius:10px;
-  border:1px solid rgba(148,163,184,.4);background:#020617;
+.chip.rankTop span.label{
+  color:#f9fafb;
 }
-.hit-table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px;}
-.hit-table thead{position:sticky;top:0;background:#020617;z-index:1;}
-.hit-table th,.hit-table td{
-  padding:6px 8px;text-align:left;
+.chip.rankTop span.value{
+  color:#7dd3fc;
+}
+
+/* 命中紀錄表 */
+.hit-table-wrapper{
+  max-height:260px;
+  overflow:auto;
+  border-radius:10px;
+  border:1px solid rgba(148,163,184,.4);
+  background:#020617;
+}
+.hit-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  min-width:480px;
+}
+.hit-table thead{
+  position:sticky;
+  top:0;
+  background:#020617;
+  z-index:1;
+}
+.hit-table th,
+.hit-table td{
+  padding:6px 8px;
+  text-align:left;
   border-bottom:1px solid rgba(30,64,175,.5);
 }
-.hit-table th{color:#bfdbfe;font-weight:600;}
-.hit-table tr:nth-child(even){background:#020617;}
-.hit-table tr:nth-child(odd){background:#020617;}
-.hit-table tr:hover{background:#0b1120;}
+.hit-table th{
+  color:#bfdbfe;
+  font-weight:600;
+}
+.hit-table tr:nth-child(even){
+  background:#020617;
+}
+.hit-table tr:nth-child(odd){
+  background:#020617;
+}
+.hit-table tr:hover{
+  background:#0b1120;
+}
 </style>
 </head>
 <body>
-<h1>17Live 三星彩中獎機率計算器 v18.4.1</h1>
-<div id="stats" style="color:#60a5fa;font-size:13px;line-height:1.4;margin-bottom:6px"></div>
-<div style="color:#94a3b8;font-size:13px;margin-bottom:8px">
+<h1>17Live 三星彩中獎機率計算器</h1>
+<div id="stats" style="color:#60a5fa;font-size:13px;line-height:1.4;margin-bottom:8px"></div>
+<div style="color:#94a3b8;font-size:13px;margin-bottom:10px">
   建議預設：r=0.80、啟用「🔁 熱號連開懲罰」與「避免重複上一期」
 </div>
 
 <div class="card">
   <label>衰減權重 r</label>
   <div class="row">
-    <input id="r" type="number" step="0.01" value="0.8" min="0" max="1" style="max-width:90px">
+    <input id="r" type="number" step="0.01" value="0.8" min="0" max="1" style="max-width:100px">
     <button class="btn sec" onclick="setR(0.6)">r=0.6</button>
     <button class="btn sec" onclick="setR(0.8)">r=0.8</button>
     <button class="btn sec" onclick="setR(0.95)">r=0.95</button>
   </div>
-  <div class="row" style="margin-top:6px">
+  <div class="row" style="margin-top:8px">
     <label class="switch"><input type="checkbox" id="streak" checked> 🔁 熱號連開懲罰</label>
     <label class="switch"><input type="checkbox" id="avoidRepeat" checked onchange="toggleStrict()"> 避免重複上一期</label>
     <label id="strictWrap"><input type="checkbox" id="strictRepeat"> 嚴格排除（兩碼以上重複直接剃除）</label>
   </div>
-  <label style="margin-top:6px">我的下注（三顆一組，每行一組）</label>
-  <textarea id="bets" rows="3" placeholder="例如：1 4 6&#10;1 9 2&#10;4 6 9"></textarea>
-  <div class="row" style="margin-top:6px">
+
+  <label style="margin-top:8px">我的下注（三顆一組，每行一組）</label>
+  <textarea id="bets" placeholder="例如：1 4 6&#10;1 9 2&#10;4 6 9"></textarea>
+
+  <div class="row" style="margin-top:8px">
     <button class="btn" onclick="run()">計算中獎機率</button>
   </div>
-  <div class="divider"></div>
+
+  <div class="divider" style="margin:10px 0"></div>
   <label>新增最新一期（三顆）</label>
   <input id="latest" placeholder="例如：2 5 7">
   <div class="row">
@@ -103,18 +196,25 @@ label.switch input{margin-right:4px;vertical-align:middle;}
     <button class="btn sec" onclick="clearAdded()">重置本機新增</button>
   </div>
 </div>
+
+<!-- 各號碼機率分佈 -->
 <div class="card">
   <h3>🔢 各號碼機率分佈（依權重排序）</h3>
-  <div id="singleTop" class="mono split2" style="margin-top:4px;">
-    <div style="grid-column:1 / -1;font-size:13px;color:#9ca3af">
-      尚未計算，請先按「計算中獎機率」。
-    </div>
+  <div style="font-size:12px;color:#9ca3af;margin-bottom:4px">
+    單號平均理論機率：約 10.00%（完全隨機 1/10）
+  </div>
+  <div id="singleTop" class="mono split2" style="margin-top:6px;">
+    <div style="grid-column:1 / -1;font-size:13px;color:#9ca3af">尚未計算，請先按「計算中獎機率」。</div>
   </div>
 </div>
 
+<!-- Top10 推薦 -->
 <div class="card">
   <h3>💡 最新推薦結果（Top1～Top10）</h3>
-  <div id="toplist" class="mono split2" style="margin-top:4px;"></div>
+  <div style="font-size:12px;color:#9ca3af;margin-bottom:4px">
+    三號組平均理論機率：約 0.83%（1 / C(10,3) ≈ 1/120）
+  </div>
+  <div id="toplist" class="mono split2" style="margin-top:6px;"></div>
 </div>
 
 <div class="card">
@@ -122,24 +222,106 @@ label.switch input{margin-right:4px;vertical-align:middle;}
   <div id="myres" class="mono" style="font-size:13px;color:#94a3b8">尚未計算</div>
 </div>
 
+<!-- 命中紀錄表 -->
+<div class="card">
+  <h3>📈 命中紀錄表（回測：以 TopN 預測下一期）</h3>
+  <div style="font-size:12px;color:#9ca3af;margin-bottom:6px">
+    🔢 回測採用前
+    <select id="topN" onchange="run()" style="width:auto;display:inline-block;background:#020617;color:#e5e7eb;border:1px solid rgba(148,163,184,.6);border-radius:999px;padding:2px 10px;font-size:12px;margin:0 4px;">
+      <option value="1">1</option>
+      <option value="3" selected>3</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+    </select>
+    組
+  </div>
+  <div id="hitSummary" style="font-size:12px;color:#9ca3af;margin-bottom:4px">
+    尚未回測。請先按「計算中獎機率」。</div>
+  <div class="hit-table-wrapper">
+    <table class="hit-table" id="hitTable">
+      <thead>
+        <tr>
+          <th>期數</th>
+          <th>開獎號碼</th>
+          <th>最佳命中</th>
+          <th>命中組合（最佳）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 動態填入 -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <script>
-const baseHistory=[[7,5,6],[9,10,4],[9,8,1],[5,4,1],[6,9,1],[3,7,10],[10,2,3],[8,9,6],[1,5,9],[4,1,8],[6,4,2]];
+// 內建 21 期歷史
+const baseHistory=[
+  [7,5,6],[9,10,4],[9,8,1],[5,4,1],[6,9,1],
+  [3,7,10],[10,2,3],[8,9,6],[1,5,9],[4,1,8],
+  [6,4,2],[10,8,6],[6,4,8],[4,9,10],[10,5,3],
+  [9,6,1],[6,5,10],[2,4,7],[1,4,6],[4,6,10],
+  [4,6,1]
+];
+const LS_KEY="extraHist_v182";
+let added=JSON.parse(localStorage.getItem(LS_KEY)||"[]");
+
 function toggleStrict(){
   document.getElementById("strictWrap").style.display=
     document.getElementById("avoidRepeat").checked?"inline-block":"none";
 }
 toggleStrict();
-function setR(v){document.getElementById("r").value=v;}
 
-function singleProbsByR(hist,r){
+function updateStats(){
+  const total=baseHistory.length+added.length;
+  const latest=(added.length?added[added.length-1]:baseHistory[baseHistory.length-1]).join(" ");
+  document.getElementById("stats").innerHTML=
+    `📊 目前共有 ${total} 期（含 ${added.length} 期本機新增）<br>最新一期：${latest}`;
+}
+updateStats();
+
+function appendLatest(){
+  const v=document.getElementById("latest").value.trim().split(/\s+/).map(Number);
+  if(v.length===3&&v.every(n=>!isNaN(n))){
+    added.push(v);
+    localStorage.setItem(LS_KEY,JSON.stringify(added));
+    updateStats();
+    alert("已加入！");
+    document.getElementById("latest").value="";
+  }else alert("請輸入三個數字");
+}
+function clearAdded(){
+  if(confirm("確定清除？")){
+    added=[];
+    localStorage.removeItem(LS_KEY);
+    updateStats();
+  }
+}
+function setR(v){document.getElementById("r").value=v;}
+function getAll(){return baseHistory.concat(added);}
+
+// 單號權重（含 r + 熱號連開懲罰）
+function singleProbsByR(hist,r,sp){
   const w=Array(10).fill(0),n=hist.length;
   for(let i=0;i<n;i++){
     const ww=Math.pow(r,n-1-i);
     for(const x of hist[i])w[x-1]+=ww;
   }
+  if(sp){
+    for(let num=1;num<=10;num++){
+      let c=0,m=0,maxc=0,maxm=0;
+      for(let i=0;i<n;i++){
+        if(hist[i].includes(num)){c++;maxc=Math.max(maxc,c);m=0;}
+        else{m++;maxm=Math.max(maxm,m);c=0;}
+      }
+      if(maxc>=3)w[num-1]*=0.7;
+      if(maxm>=3)w[num-1]*=1.2;
+    }
+  }
   const s=w.reduce((a,b)=>a+b,0)||1;
   return w.map(v=>v/s);
 }
+
 function allTrios(){
   const r=[];
   for(let i=1;i<=10;i++)
@@ -148,6 +330,7 @@ function allTrios(){
         r.push([i,j,k]);
   return r;
 }
+
 function trioProb(p,t){
   const[a,b,c]=t.map(x=>p[x-1]);
   const seq=(x,y,z)=>(x*(y/(1-x))*(z/(1-x-y)));
@@ -158,36 +341,231 @@ function trioProb(p,t){
   ].reduce((x,y)=>x+y,0);
 }
 function fmt(x){return(x*100).toFixed(2)+"%";}
-function computeTopCombos(hist,probs){
+
+// 各號碼機率分佈：排名後左右分欄 Top1-5 / Top6-10
+function updateSingleTop(probs,hist){
+  const n=hist.length;
+  const last=hist[n-1]||[];
+  const prev=hist[n-2]||[];
+  const prev2=hist[n-3]||[];
+  const weights=[];
+  for(let i=0;i<10;i++){
+    const num=i+1;
+    let f=1;
+    if(last.includes(num))f*=0.6;
+    if(prev.includes(num))f*=0.7;
+    if(prev2.includes(num)&&prev.includes(num)&&last.includes(num))f*=0.85;
+    weights.push(probs[i]*f);
+  }
+  const sum=weights.reduce((a,b)=>a+b,0)||1;
+  const adj=weights.map(w=>w/sum);
+  const arr=adj.map((p,i)=>({num:i+1,p})).sort((a,b)=>b.p-a.p);
+
+  const container=document.getElementById("singleTop");
+  if(!arr.length){
+    container.innerHTML=`<div style="grid-column:1 / -1;font-size:13px;color:#9ca3af">尚未計算。</div>`;
+    return;
+  }
+
+  const left = arr.slice(0,5);
+  const right = arr.slice(5,10);
+
+  let leftHtml="", rightHtml="";
+  left.forEach((o,idx)=>{
+    let color="#9ca3af";
+    if(o.p>0.03)color="#38bdf8";
+    else if(o.p>=0.02)color="#e5e7eb";
+    const rank = idx+1;
+    const cls = rank<=3 ? "chip rankTop" : "chip";
+    leftHtml+=`
+      <div class="${cls}">
+        <span class="label">#${rank} 號碼 ${o.num}</span>
+        <span class="value" style="color:${color}">${(o.p*100).toFixed(2)}%</span>
+      </div>`;
+  });
+  right.forEach((o,idx)=>{
+    let color="#9ca3af";
+    if(o.p>0.03)color="#38bdf8";
+    else if(o.p>=0.02)color="#e5e7eb";
+    const rank = idx+6;
+    const cls = rank<=3 ? "chip rankTop" : "chip";
+    rightHtml+=`
+      <div class="${cls}">
+        <span class="label">#${rank} 號碼 ${o.num}</span>
+        <span class="value" style="color:${color}">${(o.p*100).toFixed(2)}%</span>
+      </div>`;
+  });
+
+  container.innerHTML = `
+    <div>${leftHtml}</div>
+    <div>${rightHtml}</div>
+  `;
+}
+
+// 組合層：平衡懲罰版
+function computeTopCombos(hist,probs,avoid,strict){
   const tri=allTrios();
+  const n=hist.length;
+  const last=hist[n-1];
+  const prev=hist[n-2]||[];
+  const hotSet=new Set([...last,...prev]);
   const scored=[];
   for(const t of tri){
     let sc=trioProb(probs,t);
+    if(sc<=0)continue;
+
+    const hotCount=t.filter(x=>hotSet.has(x)).length;
+    if(hotCount===1)sc*=0.9;
+    else if(hotCount===2)sc*=0.75;
+    else if(hotCount===3)sc*=0.6;
+
+    if(avoid){
+      const sameLast=t.filter(x=>last.includes(x)).length;
+      if(strict && sameLast>=2){
+        sc=0;
+      }else if(!strict){
+        if(sameLast===1)sc*=0.85;
+        else if(sameLast===2)sc*=0.7;
+        else if(sameLast===3)sc*=0.5;
+      }
+    }
+
     if(sc>0)scored.push({t,sc});
   }
   scored.sort((a,b)=>b.sc-a.sc);
   return scored;
 }
+
+// 回測：從第3期開始，用每期 TopN 預測下一期；顯示全部，最多顯示最近30期
+function backtestTopN(hist,r,sp,avoid,strict,topN){
+  const n=hist.length;
+  const rows=[];
+  if(n<3)return rows;
+
+  for(let i=1;i<n-1;i++){
+    const train=hist.slice(0,i+1);
+    const target=hist[i+1];
+    const probs=singleProbsByR(train,r,sp);
+    const scored=computeTopCombos(train,probs,avoid,strict);
+    const top=scored.slice(0,topN);
+
+    let bestHit=0;
+    const hitCombos=[];
+    for(const item of top){
+      const hitCount=item.t.filter(x=>target.includes(x)).length;
+      if(hitCount>0)hitCombos.push({t:item.t,hit:hitCount});
+      if(hitCount>bestHit)bestHit=hitCount;
+    }
+
+    rows.push({
+      issue:i+2,
+      target,
+      bestHit,
+      hitCombos,
+      topN
+    });
+  }
+  return rows;
+}
+
+// 命中紀錄表（表格，顯示全部或最近30期）
+function renderHits(rows,topN){
+  const summaryDiv=document.getElementById("hitSummary");
+  const tbody=document.querySelector("#hitTable tbody");
+  if(!rows.length){
+    summaryDiv.textContent="歷史期數不足，無法回測（至少需要 3 期）。";
+    tbody.innerHTML="";
+    return;
+  }
+
+  const totalAll=rows.length;
+  let displayRows=rows;
+  let remark="";
+  if(totalAll>30){
+    displayRows=rows.slice(-30);
+    remark=`共 ${totalAll} 期（顯示最近 30 期）`;
+  }else{
+    remark=`共 ${totalAll} 期（顯示全部）`;
+  }
+
+  let c3=0,c2=0,c1=0,c0=0,any=0;
+  for(const r of displayRows){
+    if(r.bestHit>=1)any++;
+    if(r.bestHit===3)c3++;
+    else if(r.bestHit===2)c2++;
+    else if(r.bestHit===1)c1++;
+    else c0++;
+  }
+  summaryDiv.textContent=
+    `${remark}；在這些期數中（Top${topN} 回測）：至少中 1 顆的期數 ${any} 期，全中 3 顆：${c3} 期，中 2 顆：${c2} 期，中 1 顆：${c1} 期，完全未中：${c0} 期。`;
+
+  let html="";
+  for(const r of displayRows){
+    const issue=`第 ${r.issue} 期`;
+    const targetStr=r.target.join(" ");
+    const hitLabel=(r.bestHit>0)?`${r.bestHit} 顆`:"0 顆";
+    let comboStr="—";
+    if(r.hitCombos.length){
+      const best=r.bestHit;
+      const bestList=r.hitCombos.filter(x=>x.hit===best);
+      comboStr=bestList.map(x=>x.t.join(" ")).join("、");
+    }
+    html+=`
+      <tr>
+        <td>${issue}</td>
+        <td>${targetStr}</td>
+        <td>${hitLabel}</td>
+        <td>${comboStr}</td>
+      </tr>`;
+  }
+  tbody.innerHTML=html;
+}
+
 function run(){
-  const hist=baseHistory;
-  const r=parseFloat(document.getElementById("r").value)||0.8;
-  const probs=singleProbsByR(hist,r);
-  const scored=computeTopCombos(hist,probs);
+  const hist=getAll();
+  let r=parseFloat(document.getElementById("r").value);
+  if(isNaN(r)||r<=0||r>=1){
+    r=0.8;
+    document.getElementById("r").value="0.80";
+  }
+  const sp=document.getElementById("streak").checked;
+  const avoid=document.getElementById("avoidRepeat").checked;
+  const strict=document.getElementById("strictRepeat").checked;
+  const topN=parseInt(document.getElementById("topN").value,10)||3;
+
+  const probs=singleProbsByR(hist,r,sp);
+  updateSingleTop(probs,hist);
+
+  const scored=computeTopCombos(hist,probs,avoid,strict);
   const top=scored.slice(0,10);
   const topContainer=document.getElementById("toplist");
-  const left=top.slice(0,5),right=top.slice(5,10);
-  let leftHtml="",rightHtml="";
+
+  const left = top.slice(0,5);
+  const right = top.slice(5,10);
+  let leftHtml="", rightHtml="";
   left.forEach((o,idx)=>{
     const rank=idx+1;
-    const cls=rank<=3?"chip rankTop":"chip";
-    leftHtml+=`<div class="${cls}"><span class="label">Top${rank}｜${o.t.join(" ")}</span><span class="value">${fmt(o.sc)}</span></div>`;
+    const cls = rank<=3 ? "chip rankTop" : "chip";
+    leftHtml+=`
+      <div class="${cls}">
+        <span class="label">Top${rank}｜${o.t.join(" ")}</span>
+        <span class="value">${fmt(o.sc)}</span>
+      </div>`;
   });
   right.forEach((o,idx)=>{
     const rank=idx+6;
-    const cls=rank<=3?"chip rankTop":"chip";
-    rightHtml+=`<div class="${cls}"><span class="label">Top${rank}｜${o.t.join(" ")}</span><span class="value">${fmt(o.sc)}</span></div>`;
+    const cls = rank<=3 ? "chip rankTop" : "chip";
+    rightHtml+=`
+      <div class="${cls}">
+        <span class="label">Top${rank}｜${o.t.join(" ")}</span>
+        <span class="value">${fmt(o.sc)}</span>
+      </div>`;
   });
-  topContainer.innerHTML=`<div>${leftHtml}</div><div>${rightHtml}</div>`;
+  topContainer.innerHTML=`
+    <div>${leftHtml}</div>
+    <div>${rightHtml}</div>
+  `;
+
   const bets=document.getElementById("bets").value.trim();
   if(!bets){
     document.getElementById("myres").textContent="尚未輸入下注。";
@@ -196,18 +574,15 @@ function run(){
     const res=[];
     for(const l of lines){
       const trio=l.split(/\s+/).map(Number).filter(n=>!isNaN(n));
-      if(trio.length!==3){
-        res.push(`${l} → 格式錯誤`);
-        continue;
-      }
+      if(trio.length!==3){res.push(`${l} → 格式錯誤`);continue;}
       const pz=trioProb(probs,trio);
-      const sortedKey=trio.slice().sort((a,b)=>a-b).join(",");
-      const rankIndex=scored.findIndex(x=>x.t.join(",")===sortedKey);
-      const rankText=rankIndex>=0?`（第 ${rankIndex+1} 名／共 120 組）`:"";
-      res.push(`${trio.join(" ")} → ${fmt(pz)} ${rankText}`);
+      res.push(`${trio.join(" ")} → ${fmt(pz)}`);
     }
     document.getElementById("myres").textContent=res.join("\n");
   }
+
+  const rows=backtestTopN(hist,r,sp,avoid,strict,topN);
+  renderHits(rows,topN);
 }
 </script>
 </body>
