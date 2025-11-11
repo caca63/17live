@@ -83,8 +83,11 @@ label.switch input{
 .split2{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:8px;  /* 左右距離 */
-  row-gap:1px;     /* 🔧 改這裡：上下距離縮小為 1px */
+  column-gap:8px;   /* 左右間距保持 */
+  row-gap:0;        /* 🔧 垂直間距改成 0，兩排更緊 */
+}
+#singleTop .chip, #toplist .chip {
+  margin-bottom:0;  /* 🔧 卡片之間不再留額外底距 */
 }
 
 /* 小卡片樣式 */
