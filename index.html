@@ -79,16 +79,18 @@ label.switch input{
   vertical-align:middle;
 }
 
-/* 左右兩欄容器：改用 flex + 兩個直欄確保貼齊 */
+/* 左右兩欄容器（各自獨立排列，不再共用行高） */
 .split2{
   display:flex;
-  gap:8px;            /* 左右間距 */
+  gap:8px; /* 左右間距 */
 }
 .split2>div{
   flex:1;
   display:flex;
   flex-direction:column;
-  gap:1px;            /* 🔧 每個 chip 之間垂直距離僅 1px */
+}
+#singleTop .chip, #toplist .chip{
+  margin:1px 0; /* 控制上下距離 */
 }
 
 /* 小卡片樣式 */
