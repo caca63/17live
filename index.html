@@ -260,13 +260,14 @@ label.switch input{
 </div>
 
 <script>
-// 內建 21 期歷史
+// 內建 29 期歷史
 const baseHistory=[
   [7,5,6],[9,10,4],[9,8,1],[5,4,1],[6,9,1],
   [3,7,10],[10,2,3],[8,9,6],[1,5,9],[4,1,8],
   [6,4,2],[10,8,6],[6,4,8],[4,9,10],[10,5,3],
   [9,6,1],[6,5,10],[2,4,7],[1,4,6],[4,6,10],
-  [4,6,1]
+  [4,6,1],[2,10,5],[1,7,2],[2,8,9],[8,1,6],
+  [9,6,8],[2,6,1],[3,7,10],[7,9,10]
 ];
 const LS_KEY="extraHist_v182";
 let added=JSON.parse(localStorage.getItem(LS_KEY)||"[]");
@@ -473,6 +474,16 @@ function backtestTopN(hist,r,sp,avoid,strict,topN){
   return rows;
 }
 
+// 依期數自動生成日期（第 1 期 = 2025/10/22，每期 +1 天）
+function getIssueDate(issue){
+  const baseDate = new Date(2025, 9, 22); // 月份從 0 開始，9=10月
+  baseDate.setDate(baseDate.getDate() + (issue - 1));
+  const y = baseDate.getFullYear() - 1911; // 轉民國年
+  const m = String(baseDate.getMonth() + 1).padStart(2, "0");
+  const d = String(baseDate.getDate()).padStart(2, "0");
+  return `（${y}/${m}/${d}）`;
+}
+
 // 命中紀錄表（表格，顯示全部或最近30期）
 function renderHits(rows,topN){
   const summaryDiv=document.getElementById("hitSummary");
@@ -506,7 +517,7 @@ function renderHits(rows,topN){
 
   let html="";
   for(const r of displayRows){
-    const issue=`第 ${r.issue} 期`;
+    const issue=`第 ${r.issue} 期 ${getIssueDate(r.issue)}`; // ✅ 顯示日期
     const targetStr=r.target.join(" ");
     const hitLabel=(r.bestHit>0)?`${r.bestHit} 顆`:"0 顆";
     let comboStr="—";
@@ -517,10 +528,10 @@ function renderHits(rows,topN){
     }
     html+=`
       <tr>
-        <td>${issue}</td>
+        <td style="width:90px;white-space:nowrap;">${issue}</td>
         <td>${targetStr}</td>
         <td>${hitLabel}</td>
-        <td>${comboStr}</td>
+        <td style="max-width:280px;word-break:break-all;">${comboStr}</td>
       </tr>`;
   }
   tbody.innerHTML=html;
@@ -573,18 +584,21 @@ function run(){
 
   const bets=document.getElementById("bets").value.trim();
   if(!bets){
-    document.getElementById("myres").textContent="尚未輸入下注。";
-  }else{
-    const lines=bets.split(/\n+/).map(l=>l.trim()).filter(Boolean);
-    const res=[];
-    for(const l of lines){
-      const trio=l.split(/\s+/).map(Number).filter(n=>!isNaN(n));
-      if(trio.length!==3){res.push(`${l} → 格式錯誤`);continue;}
-      const pz=trioProb(probs,trio);
-      res.push(`${trio.join(" ")} → ${fmt(pz)}`);
-    }
-    document.getElementById("myres").textContent=res.join("\n");
+  document.getElementById("myres").textContent="尚未輸入下注。";
+}else{
+  const lines=bets.split(/\n+/).map(l=>l.trim()).filter(Boolean);
+  const res=[];
+  for(const l of lines){
+    const trio=l.split(/\s+/).map(Number).filter(n=>!isNaN(n));
+    if(trio.length!==3){res.push(`${l} → 格式錯誤`);continue;}
+    const pz=trioProb(probs,trio);
+    const sortedKey=trio.slice().sort((a,b)=>a-b).join(",");
+    const rankIndex=scored.findIndex(x=>x.t.join(",")===sortedKey);
+    const rankText=rankIndex>=0?`（第 ${rankIndex+1} 名／共 120 組）`:"";
+    res.push(`${trio.join(" ")} → ${fmt(pz)} ${rankText}`);
   }
+  document.getElementById("myres").textContent=res.join("\n");
+}
 
   const rows=backtestTopN(hist,r,sp,avoid,strict,topN);
   renderHits(rows,topN);
